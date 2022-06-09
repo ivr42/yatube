@@ -147,6 +147,27 @@ class FollowTest(TestCase):
         with self.subTest():
             self.assertEqual(follower_count, 1)
 
+    def test_user_cant_follow_themself(self):
+        """Проверить, что пользователь не может подписаться сам на себя"""
+
+        followers_count_before = Follow.objects.filter(
+            author=FollowTest.author
+        ).count()
+
+        # Подписываемся сами на себя
+        self.author_client.get(
+            reverse(
+                "posts:profile_follow", kwargs={"username": FollowTest.author}
+            )
+        )
+
+        followers_count_after = Follow.objects.filter(
+            author=FollowTest.author
+        ).count()
+
+        with self.subTest():
+            self.assertEqual(followers_count_after, followers_count_before)
+
     def test_user_have_followed_authors_posts(self):
         """Проверить, что у подписчика есть посты автора в ленте"""
 
