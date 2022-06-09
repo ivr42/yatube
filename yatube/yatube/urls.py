@@ -13,7 +13,9 @@ urlpatterns = [
     path("create/", post_create, name="post_create"),
 ]
 
+handler403 = "core.views.handler403"
 handler404 = "core.views.page_not_found"
+handler500 = "core.views.handler500"
 
 if settings.DEBUG:
     urlpatterns += static(

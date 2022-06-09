@@ -85,7 +85,7 @@ def post_detail(request: HttpRequest, post_id: int) -> HttpResponse:
         "post": post,
         "posts_count": posts_count,
         "comments": comments,
-        "form": CommentForm,
+        "form": CommentForm(),
     }
     return render(request, template, context)
 
@@ -184,10 +184,13 @@ def profile_follow(request, username):
     """Follow the author"""
     author = get_object_or_404(User, username=username)
     user = get_object_or_404(User, username=request.user)
-    if not User.objects.filter(
-        username=author,
-        following__user=user,
-    ).exists() and author != user:
+    if (
+        not User.objects.filter(
+            username=author,
+            following__user=user,
+        ).exists()
+        and author != user
+    ):
         Follow.objects.create(author=author, user=user)
 
     return redirect("posts:profile", username=author)
