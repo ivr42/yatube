@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}403 (Вам сюда нельзя){% endblock %}
+{% block content %}
+  <h1>403 Вам сюда нельзя</h1>
+  <p>Вам нельзя посещать эту страницу</p>
+  <a href="{% url 'posts:index' %}">Идите на главную</a>
+{% endblock %}

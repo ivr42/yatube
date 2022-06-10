@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}500 (Ой у нас что-то сломалось){% endblock %}
+{% block content %}
+  <h1>500 Ой у нас что-то сломалось...</h1>
+  <p>... но мы обязательно починим</p>
+  <a href="{% url 'posts:index' %}">Идите на главную</a>
+{% endblock %}
