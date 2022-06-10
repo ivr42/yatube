@@ -1,4 +1,3 @@
-from core.models import BaseModel
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -24,7 +23,7 @@ class Group(models.Model):
         return self.title
 
 
-class Post(BaseModel):
+class Post(models.Model):
     text = models.TextField(
         verbose_name="Текст сообщения",
         help_text="Введите текст сообщения",
@@ -51,13 +50,22 @@ class Post(BaseModel):
         blank=True,
         help_text="Добавьте картинку (по желанию)",
     )
+    created = models.DateTimeField(
+        verbose_name="Дата и время публикации",
+        auto_now_add=True,
+        help_text="Дата и время публикации: автоматическое поле",
+    )
 
-    class Meta(BaseModel.Meta):
+    class Meta:
+        ordering = ["-created"]
         verbose_name = "Пост"
         verbose_name_plural = "Посты"
 
+    def __str__(self):
+        return self.text[:15]
 
-class Comment(BaseModel):
+
+class Comment(models.Model):
     text = models.TextField(
         verbose_name="Текст комментария",
         help_text="Введите текст комментария",
@@ -76,10 +84,19 @@ class Comment(BaseModel):
         related_name="comments",
         help_text="Ссылка на пост, к которому оставлен комментарий",
     )
+    created = models.DateTimeField(
+        verbose_name="Дата и время публикации",
+        auto_now_add=True,
+        help_text="Дата и время публикации: автоматическое поле",
+    )
 
-    class Meta(BaseModel.Meta):
+    class Meta:
+        ordering = ["-created"]
         verbose_name = "Комментарий"
         verbose_name_plural = "Комментарии"
+
+    def __str__(self):
+        return self.text[:15]
 
 
 class Follow(models.Model):
