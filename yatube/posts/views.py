@@ -103,12 +103,9 @@ def post_create(request: HttpRequest) -> HttpResponse:
         new_post.save()
         return redirect("posts:profile", request.user)
 
-    groups = Group.objects.all()
-
     context = {
         "title": "Новый пост",
         "form": form,
-        "groups": groups,
         "is_edit": False,
     }
 
@@ -131,12 +128,9 @@ def post_edit(request: HttpRequest, post_id: int) -> HttpResponse:
         form.save()
         return redirect("posts:post_detail", post_id)
 
-    groups = Group.objects.all()
-
     context = {
         "title": f"Изменить: {post.text[:30]}",
         "form": form,
-        "groups": groups,
         "is_edit": True,
     }
 
@@ -180,15 +174,14 @@ def follow_index(request):
 def profile_follow(request, username):
     """Follow the author"""
     author = get_object_or_404(User, username=username)
-    user = get_object_or_404(User, username=request.user)
     if (
         not User.objects.filter(
             username=author,
-            following__user=user,
+            following__user=request.user,
         ).exists()
-        and author != user
+        and author != request.user
     ):
-        Follow.objects.create(author=author, user=user)
+        Follow.objects.create(author=author, user=request.user)
 
     return redirect("posts:profile", username=author)
 
@@ -197,11 +190,7 @@ def profile_follow(request, username):
 def profile_unfollow(request, username):
     """Unfollow (dislike) the author"""
     author = get_object_or_404(User, username=username)
-    user = get_object_or_404(User, username=request.user)
-    if User.objects.filter(
-        username=author,
-        following__user=user,
-    ).exists():
-        Follow.objects.filter(author=author, user=user).delete()
+
+    Follow.objects.filter(author=author, user=request.user).delete()
 
     return redirect("posts:profile", username=author)

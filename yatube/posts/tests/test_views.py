@@ -84,8 +84,8 @@ class PostPagesTest(TestCase):
             ("group", "page_obj"),
             ("username", "posts_count", "page_obj", "following"),
             ("post", "posts_count", "comments", "form"),
-            ("title", "form", "groups", "is_edit"),
-            ("title", "form", "groups", "is_edit"),
+            ("title", "form", "is_edit"),
+            ("title", "form", "is_edit"),
             ("title", "page_obj", "follow"),
         ]
 
