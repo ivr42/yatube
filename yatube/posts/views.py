@@ -38,7 +38,6 @@ def group_posts(request: HttpRequest, slug: SlugField) -> HttpResponse:
     page_obj = paginator.get_page(page_number)
 
     context = {
-        "title": f"{group.title}",
         "group": group,
         "page_obj": page_obj,
     }
@@ -51,12 +50,12 @@ def profile(request: HttpRequest, username: str) -> HttpResponse:
     template = "posts/profile.html"
     author = get_object_or_404(User, username=username)
 
-    if request.user.is_authenticated:
-        following = User.objects.filter(
+    following = (
+        request.user.is_authenticated
+        and User.objects.filter(
             username=author, following__user=request.user
         ).exists()
-    else:
-        following = False
+    )
 
     posts = Post.objects.filter(author=author)
     paginator = Paginator(posts, POSTS_PER_PAGE)
@@ -64,7 +63,6 @@ def profile(request: HttpRequest, username: str) -> HttpResponse:
     page_obj = paginator.get_page(page_number)
 
     context = {
-        "title": f"Профайл пользователя {author.get_full_name()}",
         "username": author,
         "posts_count": posts.count(),
         "page_obj": page_obj,
@@ -81,7 +79,6 @@ def post_detail(request: HttpRequest, post_id: int) -> HttpResponse:
     comments = Comment.objects.filter(post=post)
 
     context = {
-        "title": f"Пост {post.text[:30]}",
         "post": post,
         "posts_count": posts_count,
         "comments": comments,

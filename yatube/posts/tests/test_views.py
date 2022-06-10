@@ -81,9 +81,9 @@ class PostPagesTest(TestCase):
 
         context_fields = [
             ("title", "page_obj", "index"),
-            ("title", "group", "page_obj"),
-            ("title", "username", "posts_count", "page_obj", "following"),
-            ("title", "post", "posts_count", "comments", "form"),
+            ("group", "page_obj"),
+            ("username", "posts_count", "page_obj", "following"),
+            ("post", "posts_count", "comments", "form"),
             ("title", "form", "groups", "is_edit"),
             ("title", "form", "groups", "is_edit"),
             ("title", "page_obj", "follow"),
