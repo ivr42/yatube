@@ -3,7 +3,7 @@ from django.core.paginator import Paginator
 from django.forms import SlugField
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from rest_framework import status
+from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -309,3 +309,13 @@ class APIPostDetail(APIView):
             )
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class APIPostList(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class APIPostDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
