@@ -3,7 +3,7 @@ from django.core.paginator import Paginator
 from django.forms import SlugField
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from rest_framework import generics, status
+from rest_framework import generics, status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -317,5 +317,10 @@ class APIPostList(generics.ListCreateAPIView):
 
 
 class APIPostDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer

@@ -1,6 +1,10 @@
-from django.urls import path
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
 from . import views
+
+router = DefaultRouter()
+router.register("posts", views.PostViewSet, basename="api_posts")
 
 app_name = "posts"
 
@@ -24,6 +28,5 @@ urlpatterns = [
         views.profile_unfollow,
         name="profile_unfollow",
     ),
-    path("api/v1/posts/", views.APIPostList.as_view()),
-    path("api/v1/posts/<int:pk>/", views.APIPostDetail.as_view()),
+    path("api/v1/", include(router.urls)),
 ]
