@@ -23,6 +23,21 @@ class Group(models.Model):
         return self.title
 
 
+class Tag(models.Model):
+    name = models.CharField(
+        verbose_name="Хештег",
+        help_text="Введите хештег",
+        max_length=32,
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Хештег"
+        verbose_name_plural = "Хештеги"
+
+
 class Post(models.Model):
     text = models.TextField(
         verbose_name="Текст сообщения",
@@ -54,6 +69,12 @@ class Post(models.Model):
         verbose_name="Дата и время публикации",
         auto_now_add=True,
         help_text="Дата и время публикации: автоматическое поле",
+    )
+    tag = models.ManyToManyField(
+        Tag,
+        through="TagPost",
+        verbose_name="Хештег",
+        help_text="Введите хештег",
     )
 
     class Meta:
@@ -127,3 +148,19 @@ class Follow(models.Model):
 
     def __str__(self):
         return f"{self.author} followed by {self.user}"
+
+
+class TagPost(models.Model):
+    tag = models.ForeignKey(
+        Tag,
+        on_delete=models.CASCADE,
+        verbose_name="Хештег",
+    )
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        verbose_name="Текст сообщения",
+    )
+
+    def __str__(self):
+        return f"{self.tag} {self.post}"
