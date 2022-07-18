@@ -1,4 +1,9 @@
-from rest_framework.serializers import ModelSerializer, SlugRelatedField
+from rest_framework.serializers import (
+    DateTimeField,
+    ModelSerializer,
+    SerializerMethodField,
+    SlugRelatedField,
+)
 
 from .models import Group, Post, Tag, TagPost
 
@@ -16,6 +21,7 @@ class GroupSerializer(ModelSerializer):
 
 
 class PostSerializer(ModelSerializer):
+    publication_date = DateTimeField(source="created", read_only=True)
     tag = TagSerializer(many=True, required=False, allow_null=True)
     group = SlugRelatedField(
         required=False,
@@ -23,10 +29,20 @@ class PostSerializer(ModelSerializer):
         slug_field="slug",
         queryset=Group.objects.all(),
     )
+    character_quantity = SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ("id", "text", "author", "image", "created", "group", "tag")
+        fields = (
+            "id",
+            "text",
+            "author",
+            "image",
+            "publication_date",
+            "group",
+            "tag",
+            "character_quantity",
+        )
 
     def create(self, validated_data):
         if "tag" not in self.initial_data:
@@ -49,3 +65,6 @@ class PostSerializer(ModelSerializer):
                 [Tag.objects.get_or_create(**tag)[0] for tag in tags]
             )
         return super().update(instance, validated_data)
+
+    def get_character_quantity(self, obj):
+        return len(obj.text)
