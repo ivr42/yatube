@@ -179,3 +179,4 @@ tags
 # email emulation files
 /yatube/sent_emails/
 /yatube/media/
+/yatube/static/
