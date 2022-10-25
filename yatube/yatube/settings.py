@@ -1,16 +1,19 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = "l335(w#)_naxnthuk(owxj6w8hjbm8g=sr#8bkm3w26790w_0u"
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
+    "ivr.sytes.net",
     "localhost",
     "127.0.0.1",
     "[::1]",
-    "testserver",
 ]
 
 INSTALLED_APPS = [
@@ -57,14 +60,16 @@ TEMPLATES = [
     },
 ]
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-
 WSGI_APPLICATION = "yatube.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
@@ -90,6 +95,12 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "core/static")]
 
 LOGIN_URL = "users:login"
 LOGIN_REDIRECT_URL = "posts:index"
@@ -100,8 +111,6 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 CSRF_FAILURE_VIEW = "core.views.csrf_failure"
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 CACHES = {
     "default": {
         # "BACKEND": "django.core.cache.backends.dummy.DummyCache",

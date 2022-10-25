@@ -176,7 +176,9 @@ tags
 ### Ignoring project files
 # static css files
 **/css/
+# static files
+**/static/
 # email emulation files
 /yatube/sent_emails/
+# uploaded files
 /yatube/media/
-/yatube/static/
